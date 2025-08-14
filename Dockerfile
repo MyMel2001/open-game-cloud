@@ -3,9 +3,10 @@ FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND=noninteractive \
     USERNAME=gamer \
     UID=1000 \
-    GID=1000
+    GID=1000 \
+    DISPLAY=:0
 
-# Install base packages, NVIDIA support, desktop, Flatpak, PulseAudio, Sunshine deps
+# Install core packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     xfce4 xfce4-goodies \
@@ -13,8 +14,11 @@ RUN apt-get update && \
     mesa-utils pulseaudio alsa-utils \
     wget curl git unzip \
     flatpak software-properties-common \
-    sudo nano \
-    ca-certificates gnupg \
+    sudo nano ca-certificates gnupg \
+    # VNC + noVNC
+    novnc websockify x11vnc \
+    # X server for VNC
+    xvfb \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # NVIDIA container toolkit (host must have NVIDIA drivers installed)
@@ -51,5 +55,7 @@ RUN mkdir -p ~/.config/sunshine
 # Copy entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+EXPOSE 8080 8081 47984 47989 48010 5900
 
 ENTRYPOINT ["/entrypoint.sh"]
