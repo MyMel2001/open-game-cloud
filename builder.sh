@@ -1,1 +1,1 @@
-docker build -t game-stream-24 .
+docker build -t game-stream-vnc .
