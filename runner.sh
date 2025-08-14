@@ -1,4 +1,4 @@
-docker run -it --rm \
+docker run -it -d \
   --gpus all \
   --net=host \
   --device /dev/dri \
